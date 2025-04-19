@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego: Descubre São Paulo</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    .quiz-container { background: white; padding: 20px; border-radius: 10px; max-width: 600px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h2 { color: #333; }
+    .question { font-size: 18px; margin-bottom: 10px; }
+    .options button {
+      display: block;
+      background: #e0e0e0;
+      border: none;
+      margin: 5px 0;
+      padding: 10px;
+      width: 100%;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .options button:hover { background: #ccc; }
+    .score { margin-top: 20px; font-weight: bold; }
+    .next-btn { margin-top: 15px; padding: 10px 20px; background: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .next-btn:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h2>🎲 Juego: Descubre São Paulo</h2>
+    <div id="quiz">
+      <div class="question" id="question"></div>
+      <div class="options" id="options"></div>
+      <button class="next-btn" id="nextBtn" style="display: none;">Siguiente</button>
+      <div class="score" id="score"></div>
+    </div>
+  </div>
+
+  <script>
+    const preguntas = [
+      {
+        pregunta: "¿Cuál es una de las fiestas culturales más tradicionales del estado de São Paulo?",
+        opciones: ["Carnaval de Olinda", "Festa do Peão de Barretos", "São João de Campina Grande", "Bumba Meu Boi"],
+        respuesta: 1
+      },
+      {
+        pregunta: "¿En qué siglo fue fundada la ciudad de São Paulo?",
+        opciones: ["Siglo XV", "Siglo XVI", "Siglo XVII", "Siglo XVIII"],
+        respuesta: 1
+      },
+      {
+        pregunta: "¿Cuál es uno de los sectores económicos más fuertes del estado de São Paulo?",
+        opciones: ["Agricultura de café solamente", "Turismo rural", "Industria y servicios", "Pesca artesanal"],
+        respuesta: 2
+      },
+      {
+        pregunta: "¿Cuál es el nombre del río más importante que cruza la ciudad de São Paulo?",
+        opciones: ["Río Amazonas", "Río Paraná", "Río Tietê", "Río São Francisco"],
+        respuesta: 2
+      },
+      {
+        pregunta: "¿Cuál de estos medios de transporte es común en la ciudad de São Paulo para evitar el tráfico?",
+        opciones: ["Botes", "Aviones", "Tranvías", "Metro"],
+        respuesta: 3
+      },
+      {
+        pregunta: "¿Cuál de estos platos típicos es común en el estado de São Paulo?",
+        opciones: ["Feijoada", "Moqueca capixaba", "Virado à paulista", "Acarajé"],
+        respuesta: 2
+      },
+      {
+        pregunta: "¿Qué importante avenida es símbolo cultural y financiero de la ciudad de São Paulo?",
+        opciones: ["Avenida Atlântica", "Avenida Brasil", "Avenida Paulista", "Avenida 9 de Julio"],
+        respuesta: 2
+      },
+      {
+        pregunta: "¿Qué grupo religioso fundó la ciudad de São Paulo?",
+        opciones: ["Jesuitas", "Benedictinos", "Franciscanos", "Protestantes"],
+        respuesta: 0
+      },
+      {
+        pregunta: "¿Qué producto agrícola fue muy importante para el desarrollo económico del estado en los siglos XIX y XX?",
+        opciones: ["Maíz", "Soja", "Café", "Trigo"],
+        respuesta: 2
+      },
+      {
+        pregunta: "¿Qué importante parque está ubicado en la ciudad de São Paulo y es uno de los más grandes de América Latina?",
+        opciones: ["Parque Nacional da Tijuca", "Parque Ibirapuera", "Parque do Jalapão", "Parque das Dunas"],
+        respuesta: 1
+      }
+    ];
+
+    let indice = 0;
+    let puntuacion = 0;
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const nextBtn = document.getElementById("nextBtn");
+    const scoreEl = document.getElementById("score");
+
+    function mostrarPregunta() {
+      const actual = preguntas[indice];
+      questionEl.textContent = actual.pregunta;
+      optionsEl.innerHTML = "";
+      actual.opciones.forEach((op, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = op;
+        btn.onclick = () => seleccionarRespuesta(i);
+        optionsEl.appendChild(btn);
+      });
+      nextBtn.style.display = "none";
+    }
+
+    function seleccionarRespuesta(i) {
+      const correcta = preguntas[indice].respuesta;
+      const botones = optionsEl.querySelectorAll("button");
+      botones.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === correcta) {
+          btn.style.backgroundColor = "#a8e6cf";
+        } else if (idx === i) {
+          btn.style.backgroundColor = "#ff8b94";
+        }
+      });
+      if (i === correcta) puntuacion++;
+      nextBtn.style.display = "inline-block";
+    }
+
+    nextBtn.onclick = () => {
+      indice++;
+      if (indice < preguntas.length) {
+        mostrarPregunta();
+      } else {
+        mostrarResultado();
+      }
+    };
+
+    function mostrarResultado() {
+      questionEl.textContent = "¡Juego finalizado!";
+      optionsEl.innerHTML = "Has obtenido " + puntuacion + " de " + preguntas.length + " respuestas correctas.";
+      nextBtn.style.display = "none";
+    }
+
+    mostrarPregunta();
+  </script>
+</body>
+</html>
